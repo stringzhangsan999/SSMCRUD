@@ -1,0 +1,72 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       					   http://www.springframework.org/schema/beans/spring-beans.xsd
+						   http://www.springframework.org/schema/tx
+ 						   http://www.springframework.org/schema/tx/spring-tx.xsd
+						   http://www.springframework.org/schema/aop 
+						   http://www.springframework.org/schema/aop/spring-aop.xsd
+						   http://www.springframework.org/schema/context
+						   http://www.springframework.org/schema/context/spring-context.xsd">
+			<!-- ==========================1.注解扫描组件====================== -->
+			<context:component-scan base-package="com.atguigu.ssm.crud">
+			<!-- 排除过滤扫描，我们只扫描除@Controller注解的我们将注解类型的全类名拷过来 -->
+			<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+			</context:component-scan>
+			<!-- =================2.配置数据源(先加载jdbc.properties) =======================-->
+			<context:property-placeholder location="classpath:jdbc.properties"/>
+			<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+			<property name="driverClass" value="${jdbc.driver}"></property>
+			<property name="jdbcUrl" value="${jdbc.url}"></property>
+			<property name="user" value="${jdbc.user}"></property>
+			<property name="password" value="${jdbc.password}"></property>
+			</bean>
+			<!--======================= 3.整合mybatis =============================-->
+			<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+			<!-- 数据源 -->
+			<property name="dataSource" ref="dataSource"></property>
+		     <!-- 全局配置文件 -->
+		    <property name="configLocation" value="classpath:SqlMapConfig.xml"></property> 
+			<!-- 映射文件 -->
+		    <property name="mapperLocations" value="classpath:mapper/*.xml"></property>
+			</bean>
+			
+			<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+			<property name="basePackage" value="com.atguigu.ssm.crud.dao"></property>
+			<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+			</bean>
+			
+			<!-- 创建一个可以批量操作的sqSession -->
+			<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+			<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"/>
+			<constructor-arg name="executorType" value="BATCH"></constructor-arg>
+			</bean>
+			
+			
+			<!--====================== 4.配置事务================================ -->
+			<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+			<!-- 注入数据源进行管理 -->
+			<property name="dataSource" ref="dataSource"></property>
+			</bean>	
+			
+			<!-- 配置通知 也就是需要增强的内容  下面的方法将会用事务管理起来  事务通过transaction-manager注入  下面的方法将会通过事务来维护-->	
+			<tx:advice id="txMyAdvice" transaction-manager="transactionManager">
+				<tx:attributes>
+					<tx:method name="find*" propagation="REQUIRED" read-only="true"/>
+					<tx:method name="add*" propagation="REQUIRED"/>
+					<tx:method name="update*" propagation="REQUIRED"/>
+					<tx:method name="delete*" propagation="REQUIRED"/>
+				</tx:attributes>
+			</tx:advice>
+			
+			
+			<!--配置切面 将切入点和增强内容 -->	
+			<aop:config>
+			<!-- 通过切入点表达式来配置需要生成代理对象的类 -->
+			<aop:pointcut expression="execution(* com.atguigu.ssm.crud.service..*(..))" id="MyPoint"/>
+			<aop:advisor advice-ref="txMyAdvice" pointcut-ref="MyPoint"/>
+			</aop:config>		
+</beans>

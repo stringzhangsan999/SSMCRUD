@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-config.dtd">
+ <configuration>
+ <!-- 设置驼峰命名 默认为false设置为true -->
+ <settings>
+ <setting name="mapUnderscoreToCamelCase" value="true"/>
+ </settings>
+
+  <typeAliases>
+  <!-- 批量处理别名，默认可以在mapper映射文件中使用简单类名即可访问 -->
+  <package name="com.atguigu.ssm.crud.domain"/>
+  </typeAliases>
+
+ <plugins>
+ <!-- pagehelper是mybatis超好用的分页插件 -->
+ <plugin interceptor="com.github.pagehelper.PageInterceptor">
+ <!--reasonable设置这个属性默认为false 也就是合理化分页当 pageNum(当前页)>pages(总页) 时访问的永远是最后一页，当pageNum<=0时 访问的永远是第一页  -->
+ <property name="reasonable" value="true"/>
+ </plugin>
+ </plugins>
+ </configuration>

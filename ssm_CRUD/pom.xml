@@ -1,0 +1,136 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.atguigu.employee</groupId>
+	<artifactId>ssm_CRUD</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<dependencies>
+	<!-- json数据转换的jar包 -->
+	<dependency>
+	    <groupId>com.fasterxml.jackson.core</groupId>
+	    <artifactId>jackson-databind</artifactId>
+	    <version>2.8.8</version>
+     </dependency>
+		<!-- springmvc所需要的依赖 -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>4.3.7.RELEASE</version>
+		</dependency>
+		<!-- 面向切面编程所需要的jar包 -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
+			<version>4.3.7.RELEASE</version>
+		</dependency>
+		<!-- spring与数据库连接所需的jar包 -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>4.3.7.RELEASE</version>
+		</dependency>
+		
+		<!-- spring test的依赖 -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-test</artifactId>
+		    <version>4.3.7.RELEASE</version>
+		    <scope>privided</scope>
+		</dependency>
+		<!-- 数据库连接池c3p0 -->
+		<dependency>
+   			 <groupId>com.mchange</groupId>
+    		<artifactId>c3p0</artifactId>
+   			 <version>0.9.5.1</version>
+		</dependency>
+		<!-- 数据库连接驱动 -->
+		<dependency>
+   			 <groupId>mysql</groupId>
+    		 <artifactId>mysql-connector-java</artifactId>
+   			 <version>5.1.41</version>
+		</dependency>
+		<!-- 添加servlet-api这样使用jsp时不会报错，但是在服务器中已经自动配备了这个jar包
+		我们把作用域设置为provided这样部署项目时不会将这个jar包配置进去避免jar包冲突-->
+		<dependency>
+    		<groupId>javax.servlet</groupId>
+    		<artifactId>javax.servlet-api</artifactId>
+    		<version>3.0.1</version>
+  			 <scope>provided</scope>
+		</dependency>
+		<!-- 添加junit.jar包 作用域设置为test 本来项目中已经加入了Junit4再添加打包时会出错 -->
+	 	<dependency>
+    		<groupId>junit</groupId>
+    		<artifactId>junit</artifactId>
+    		<version>4.12</version>
+  		    <scope>test</scope>
+		</dependency> 
+		<!-- 添加mybatis所需要的jar包 -->
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>3.4.2</version>
+		</dependency>
+		<!-- 添加mybatis整合spring的jar包 -->
+		<dependency>
+    		<groupId>org.mybatis</groupId>
+    		<artifactId>mybatis-spring</artifactId>
+   			 <version>1.3.1</version>
+		</dependency>
+		<!-- 添加mybatis逆向工程的核心jar包依赖 -->
+		<dependency>
+		    <groupId>org.mybatis.generator</groupId>
+		    <artifactId>mybatis-generator-core</artifactId>
+		    <version>1.3.2</version>
+		</dependency>
+		<!-- mybatis的分页插件pageHelper -->
+		
+		<dependency>
+		    <groupId>com.github.pagehelper</groupId>
+		    <artifactId>pagehelper</artifactId>
+		    <version>5.0.0</version>
+		</dependency>
+		
+		
+		<!-- 日志jar包log4j -->
+	<!-- 	<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency> -->
+		<!-- 添加标准标签库jstl -->
+		
+		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>jstl</artifactId>
+		    <version>1.2</version>
+		</dependency>
+		<!-- 我们使用JSR303校验规范需要导入一个校验依赖 详细操作见书
+		JSR303数据校验支持：Tomcat7以上服务器
+		而tomcat7以下版本的服务器，el表达式不支持这个规范，我们需要去 服务器里面lib下去更换el表达式更高版本的jar包
+		 -->
+			<dependency>
+			    <groupId>org.hibernate</groupId>
+			    <artifactId>hibernate-validator</artifactId>
+			    <version>5.4.1.Final</version>
+			</dependency>
+	</dependencies>
+	
+	 <!-- 当时我们执行maven install命令时一直报error所以我们加的这个 一般的web.xml放在webapp下我们改名了所以加上这个配置
+	 <build>
+	 <plugins>
+        <plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-war-plugin</artifactId>
+	            <version>2.2</version>
+	            <configuration>
+	                指定web.xml的路径 
+					<webXml>WebRoot\WEB-INF\web.xml</webXml>
+					指定jsp、js、css的路径 
+					<warSourceDirectory>WebRoot</warSourceDirectory>
+	            </configuration>
+	        </plugin>
+	        </plugins>
+   </build> -->
+</project>
